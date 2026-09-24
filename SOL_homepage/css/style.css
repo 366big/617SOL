@@ -30,6 +30,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;z-
 .nav-links a{font-size:13px;color:#655d53;padding:10px 14px;border-radius:12px;transition:.25s ease}
 .nav-links a:hover,.nav-links a.active{background:#eee4d4;color:#2e2923}
 .nav-cta{padding:10px 16px!important;background:#302b25!important;color:#fffaf1!important;box-shadow:0 7px 18px rgba(48,43,37,.14)}
+.nav-links .hub-link{color:#8a6834;border:1px solid rgba(166,126,58,.22);background:rgba(255,250,239,.58);padding:9px 12px}.nav-links .hub-link:hover{background:#eee4d4;color:#5f4928}
 .menu-btn{display:none;border:0;background:none;color:var(--ink);font-size:22px;cursor:pointer}
 
 .hero{min-height:850px;position:relative;display:flex;align-items:center;overflow:hidden;padding:150px 24px 100px}
