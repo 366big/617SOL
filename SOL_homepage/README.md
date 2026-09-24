@@ -1,17 +1,14 @@
 # SOL Homepage
 
-Bright beige / warm gold community website for Kingdom 617 Korean Alliance SOL.
+Kingdom 617 Korean Alliance — SOL
 
 ## Structure
-- Home
-- 왕국 소개
-- SOL 소개
-- 이민 안내
-- 갤러리
+- `index.html` — SOL entrance screen
+- `home.html` — main homepage
+- `pages/kingdom/` — Kingdom 617
+- `pages/sol/` — SOL introduction
+- `pages/migration/` — migration information/application
+- `pages/gallery/` — SOL Moments gallery
 
-## Important edits
-- `pages/migration/index.html`: replace the Google Form URL with the real SOL migration application form.
-- `pages/gallery/index.html`: replace placeholder gallery cards with real images as they are collected.
-- `css/style.css`: central theme variables are at the top for quick color/spacing changes.
-
-The site is static HTML/CSS/JS and can be deployed to Vercel or Netlify.
+## Entrance
+The entrance uses `assets/images/sol-entrance.png` as the visual background. The image already contains the SOL logo and tagline; `WELCOME` and the `SOL 입장하기` button are HTML/CSS overlays so they can animate independently without covering the artwork's existing typography.
