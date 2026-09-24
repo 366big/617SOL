@@ -105,7 +105,14 @@ async function fetchBoard(board, limit, key) {
 }
 
 function extractBoardRows(data) {
-  const roots = [data?.ranks, data?.leaderboard, data?.board, data?.data, data?.data?.ranks, data?.data?.leaderboard];
+  const roots = [
+    data?.ranks,
+    data?.leaderboard,
+    data?.board,
+    data?.data,
+    data?.data?.ranks,
+    data?.data?.leaderboard
+  ];
   for (const root of roots) {
     if (Array.isArray(root)) return root;
     if (root && typeof root === "object") {
@@ -117,50 +124,95 @@ function extractBoardRows(data) {
   return [];
 }
 
-function normalizeAllianceBoard(data) {
-  return extractBoardRows(data).map((r, i) => ({
-    rank: Number(r.rank ?? r.kingdom_rank ?? r.position ?? i + 1),
-    name: String(r.abbr ?? r.name ?? r.alliance_abbr ?? r.tag ?? "—"),
-    full_name: String(r.name ?? r.alliance_name ?? r.abbr ?? r.tag ?? "—"),
-    power: num(r.score ?? r.power ?? r.alliance_power ?? r.value ?? r.total_power)
-  })).filter(r => r.name !== "—" && r.power > 0).slice(0, 10);
+function extractWebPlayers(webData) {
+  const roots = [webData?.players, webData?.data?.players];
+  for (const root of roots) if (Array.isArray(root)) return root;
+  return [];
 }
 
-function normalizePlayerBoard(data, field) {
-  return extractBoardRows(data).map((r, i) => ({
-    rank: Number(r.rank ?? r.kingdom_rank ?? r.position ?? i + 1),
-    name: String(r.nick_name ?? r.nickname ?? r.player_name ?? r.name ?? "—"),
-    alliance: String(r.alliance_abbr ?? r.abbr ?? r.alliance_tag ?? r.tag ?? ""),
-    score: num(r.score ?? r[field] ?? r.value ?? r.power ?? r.mystic_trial)
-  })).filter(r => r.name !== "—" && r.score > 0).slice(0, 20);
+function extractWebAlliances(webData) {
+  const roots = [webData?.alliances, webData?.data?.alliances];
+  for (const root of roots) if (Array.isArray(root)) return root;
+  return [];
 }
 
+function playerKey(r) {
+  return String(r?.governor_id ?? r?.fid ?? r?.uid ?? r?.id ?? "");
+}
+
+function normalizeMysticBoard(data, webPlayers) {
+  const board = extractBoardRows(data);
+  const byId = new Map();
+  const byName = new Map();
+  for (const p of webPlayers) {
+    const id = playerKey(p);
+    if (id) byId.set(id, p);
+    if (p?.nick_name) byName.set(String(p.nick_name), p);
+  }
+  return board.map((r, i) => {
+    const base = byId.get(playerKey(r)) || byName.get(String(r?.nick_name ?? r?.nickname ?? r?.player_name ?? r?.name ?? "")) || {};
+    return {
+      rank: Number(r.rank ?? r.kingdom_rank ?? r.position ?? i + 1),
+      name: String(r.nick_name ?? r.nickname ?? r.player_name ?? r.name ?? base.nick_name ?? "—"),
+      alliance: String(r.alliance_abbr ?? r.abbr ?? r.alliance_tag ?? r.tag ?? base.alliance_abbr ?? ""),
+      score: num(r.score ?? r.mystic_trial ?? r.value ?? r.points ?? r.mystic_score)
+    };
+  }).filter(r => r.name !== "—" && r.score > 0).sort((a,b) => b.score - a.score).slice(0,20);
+}
+
+function normalizePersonalBoard(webPlayers) {
+  return webPlayers
+    .filter(r => r && num(r.power) > 0)
+    .sort((a,b) => num(b.power) - num(a.power))
+    .slice(0,20)
+    .map((r,i) => ({
+      rank: Number(r.rank ?? i + 1),
+      name: String(r.nick_name ?? "—"),
+      alliance: String(r.alliance_abbr ?? ""),
+      score: num(r.power)
+    }));
+}
+
+function normalizeAllianceBoard(webAlliances) {
+  return webAlliances
+    .filter(r => r && num(r.power) > 0)
+    .sort((a,b) => num(a.game_power ?? a.power) - num(b.game_power ?? b.power))
+    .reverse()
+    .slice(0,10)
+    .map((r,i) => ({
+      rank: Number(r.game_power_rank ?? r.rank ?? i + 1),
+      name: String(r.abbr ?? r.slug ?? r.name ?? "—"),
+      full_name: String(r.name ?? r.abbr ?? "—"),
+      power: num(r.game_power ?? r.power)
+    }));
+}
 
 export default async function handler(req,res){
   if(req.method!=="GET") return res.status(405).json({error:"Method not allowed"});
   const key=process.env.MIGHTPULSE_API_KEY;
   if(!key) return res.status(500).json({error:"MIGHTPULSE_API_KEY is not configured in Vercel."});
   try{
-    const [kingdomResponse,webResponse,allianceData,personalData,mysticData]=await Promise.all([
+    const [kingdomResponse,webResponse,mysticData]=await Promise.all([
       fetch(`${API}/kingdoms/617`,{headers:{Authorization:`Bearer ${key}`,Accept:"application/json"}}),
       fetch(`${WEB_API}/kingdoms/617?players=100&alliances=100`,{headers:{Accept:"application/json, text/plain, */*",Referer:"https://mightpulse.com/kingdom/617",Origin:"https://mightpulse.com","User-Agent":"Mozilla/5.0"}}),
-      fetchBoard("alliance_power",10,key),
-      fetchBoard("personal_power",20,key),
       fetchBoard("mystic_trial",20,key)
     ]);
     const data=await readJson(kingdomResponse), webData=await readJson(webResponse);
     if(!kingdomResponse.ok) return res.status(kingdomResponse.status).json({error:"MightPulse kingdom request failed."});
+    if(!webResponse.ok) return res.status(webResponse.status).json({error:"MightPulse web kingdom request failed."});
     const kingdom=data?.kingdom||data?.data||data;
     const matchup=webData?.kvk_matchup||webData?.data?.kvk_matchup||{};
     const history=extractHistory(webData);
+    const webPlayers=extractWebPlayers(webData);
+    const webAlliances=extractWebAlliances(webData);
     res.setHeader("Cache-Control","s-maxage=1800, stale-while-revalidate=3600");
     return res.status(200).json({
       kingdom:617, name:kingdom?.name||"617",
       kvk:{season:Number(matchup?.season??0),opponent_kid:Number(matchup?.opponent?.kid??0),history},
       rankings:{
-        alliance_power:normalizeAllianceBoard(allianceData),
-        personal_power:normalizePlayerBoard(personalData,"power"),
-        mystic_trial:normalizePlayerBoard(mysticData,"mystic_trial")
+        alliance_power:normalizeAllianceBoard(webAlliances),
+        personal_power:normalizePersonalBoard(webPlayers),
+        mystic_trial:normalizeMysticBoard(mysticData,webPlayers)
       },
       fetched_at:new Date().toISOString(),source:"MightPulse"
     });
