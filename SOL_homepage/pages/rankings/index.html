@@ -1,6 +1,62 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SOL · Rankings</title><link rel="stylesheet" href="../../css/style.css"></head><body class="rankings-page">
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SOL · Rankings</title>
+<link rel="stylesheet" href="../../css/style.css">
+<style>
+.rankings-page{background:linear-gradient(180deg,#f8f2e7 0%,#f4ead9 55%,#eee0ca 100%);min-height:100vh;color:#4d3d2b}
+.rankings-page .rankings-hero{padding:145px 0 54px;text-align:center}
+.rankings-page .rankings-hero h1{font-family:Georgia,serif;letter-spacing:.12em;font-size:clamp(42px,6vw,76px);color:#7b5a2c;margin:8px 0 14px}
+.rankings-page .rankings-hero h1 em{font-style:normal;font-weight:400}
+.rankings-page .rankings-hero p{max-width:720px;margin:auto;line-height:1.9;color:#806e58}
+.rank-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.rank-tab{appearance:none;border:1px solid rgba(174,132,62,.28);border-radius:18px;padding:19px 16px;text-align:left;background:rgba(255,252,246,.62);backdrop-filter:blur(16px);box-shadow:0 12px 30px rgba(107,78,39,.08);cursor:pointer;color:#76572d;transition:.25s}
+.rank-tab strong{display:block;font-size:14px;letter-spacing:.08em}.rank-tab span{display:block;margin-top:7px;font-size:12px;color:#9b896f}.rank-tab:hover,.rank-tab.active{transform:translateY(-2px);border-color:rgba(174,132,62,.65);box-shadow:0 16px 34px rgba(123,90,44,.15),inset 0 1px rgba(255,255,255,.9);background:linear-gradient(145deg,rgba(255,255,255,.84),rgba(244,232,211,.76))}
+.rank-panel{border:1px solid rgba(174,132,62,.27);border-radius:28px;padding:28px;background:rgba(255,252,246,.62);backdrop-filter:blur(18px);box-shadow:0 22px 55px rgba(104,76,40,.1)}
+.rank-panel-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:18px}.rank-panel-head h2{margin:0;color:#634720;font-family:Georgia,serif;font-size:26px}.rank-panel-head p{margin:6px 0 0;color:#9a8567;font-size:13px}.rank-source{font-size:10px;letter-spacing:.14em;color:#aa8850;border:1px solid rgba(174,132,62,.3);padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.4)}
+.rank-list{display:grid;gap:9px}.rank-row{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:15px;padding:15px 17px;border-radius:16px;border:1px solid rgba(174,132,62,.14);background:linear-gradient(100deg,rgba(255,255,255,.7),rgba(250,242,229,.52));transition:.2s}.rank-row:hover{transform:translateX(3px);border-color:rgba(174,132,62,.38);box-shadow:0 8px 24px rgba(112,80,37,.08)}
+.rank-row.top-1,.rank-row.top-2,.rank-row.top-3{background:linear-gradient(100deg,rgba(255,251,239,.96),rgba(244,230,201,.76));border-color:rgba(181,139,68,.34)}
+.rank-num{font-family:Georgia,serif;font-size:19px;text-align:center;color:#a47a39}.rank-name strong{display:block;font-size:15px;color:#574329}.rank-name span{display:block;margin-top:4px;font-size:11px;color:#a18b6f}.rank-tag{display:inline-block;margin-right:7px;padding:3px 7px;border-radius:6px;background:rgba(170,130,65,.12);border:1px solid rgba(170,130,65,.22);color:#8b6835;font-size:10px;letter-spacing:.05em;font-weight:700}.rank-value{font-family:Georgia,serif;font-size:18px;color:#7b5a2c;white-space:nowrap}.rank-loading,.rank-empty,.rank-error{text-align:center;padding:48px 20px;color:#9b896f;line-height:1.8}.rank-error{color:#9a6555}.rank-note{font-size:11px;color:#a39178;text-align:center;margin:14px 0 0}
+@media(max-width:700px){.rankings-page .rankings-hero{padding:110px 18px 36px}.rank-tabs{gap:7px}.rank-tab{padding:14px 8px;border-radius:14px;text-align:center}.rank-tab strong{font-size:10px;letter-spacing:.03em}.rank-tab span{font-size:9px;margin-top:5px}.rank-panel{padding:17px 11px;border-radius:20px}.rank-panel-head{align-items:flex-start}.rank-panel-head h2{font-size:20px}.rank-source{font-size:8px;padding:6px 7px}.rank-row{grid-template-columns:35px 1fr auto;gap:9px;padding:13px 10px}.rank-num{font-size:16px}.rank-name strong{font-size:13px}.rank-name span{font-size:10px}.rank-value{font-size:13px}.rank-value.long{font-size:12px}.rank-tabs+.rank-panel{} }
+</style>
+</head>
+<body class="rankings-page">
 <header class="nav"><a class="brand" href="../../home.html"><span class="brand-mark"></span><span>SOL</span></a><button class="menu-toggle" type="button" aria-label="메뉴">☰</button><nav class="nav-links"><a href="../kingdom/index.html">왕국 소개</a><a href="../sol/index.html">SOL 소개</a><a class="active" href="index.html">랭킹</a><a href="../migration/index.html" class="nav-cta">이민 안내</a><a href="../gallery/index.html">갤러리</a></nav></header>
-<main><section class="rankings-hero"><div class="container"><div class="eyebrow reveal">KINGDOM 617 · MIGHTPULSE</div><h1 class="reveal">R<em>ANKINGS</em></h1><p class="reveal">Kingdom 617의 주요 랭킹을 한눈에 확인할 수 있습니다. MightPulse 데이터를 기준으로 Alliance Power는 TOP 10, Personal Power와 Mystic Trial은 TOP 20을 표시합니다.</p></div></section>
-<section class="section" style="padding-top:10px"><div class="container"><div class="rank-tabs reveal"><button class="rank-tab active" data-ranking="alliance_power"><strong>ALLIANCE POWER</strong><span>TOP 10 · 연맹 파워</span></button><button class="rank-tab" data-ranking="personal_power"><strong>PERSONAL POWER</strong><span>TOP 20 · 개인 파워</span></button><button class="rank-tab" data-ranking="mystic_trial"><strong>MYSTIC TRIAL</strong><span>TOP 20 · 미스틱 트라이얼</span></button></div>
-<div class="rank-panel reveal"><div class="rank-panel-head"><div><h2 id="rankTitle">Alliance Power</h2><p id="rankSubtitle">Kingdom 617 · Top 10 Alliances</p></div><span class="rank-source">SOURCE · MIGHTPULSE</span></div><div id="rankList" class="rank-loading">MightPulse 데이터를 불러오는 중입니다.</div></div><div class="rank-note">데이터는 MightPulse 응답 기준이며, 사이트 캐시 정책에 따라 갱신 시점에 차이가 있을 수 있습니다.</div></div></section></main><script src="../../js/main.js"></script>
-<script>(function(){const tabs=[...document.querySelectorAll('.rank-tab')],list=document.getElementById('rankList'),title=document.getElementById('rankTitle'),subtitle=document.getElementById('rankSubtitle');const meta={alliance_power:{title:'Alliance Power',sub:'Kingdom 617 · Top 10 Alliances',value:r=>fmt(r.power)},personal_power:{title:'Personal Power',sub:'Kingdom 617 · Top 20 Players',value:r=>fmt(r.power)},mystic_trial:{title:'Mystic Trial',sub:'Kingdom 617 · Top 20 Players',value:r=>fmt(r.score)}};let data=null,current='alliance_power';function fmt(n){if(!n)return'—';if(n>=1e12)return(n/1e12).toFixed(2)+'T';if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return Number(n).toLocaleString()}function esc(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}function render(){const m=meta[current];title.textContent=m.title;subtitle.textContent=m.sub;const rows=data?.rankings?.[current]||[];if(!rows.length){list.innerHTML='<div class="rank-empty">현재 해당 랭킹 데이터를 불러오지 못했습니다.<br>잠시 후 다시 확인해주세요.</div>';return}list.innerHTML='<div class="rank-list">'+rows.map((r,i)=>'<div class="rank-row"><div class="rank-num">'+(i+1)+'</div><div class="rank-name"><strong>'+esc(current==='alliance_power'?r.name:(r.name||'—'))+'</strong><span>'+esc(current==='alliance_power'?'Kingdom 617':(r.alliance||''))+'</span></div><div class="rank-value">'+m.value(r)+'</div></div>').join('')+'</div>'}async function load(){try{const r=await fetch('../../api/kingdom-617',{headers:{Accept:'application/json'}});if(!r.ok)throw new Error('API '+r.status);data=await r.json();if(data.error)throw new Error(data.error);render()}catch(e){list.innerHTML='<div class="rank-error">MightPulse 랭킹 데이터를 불러오지 못했습니다.<br>'+esc(e.message||'Unknown error')+'</div>'}}tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');current=t.dataset.ranking;render()}));load()})();</script></body></html>
+<main>
+<section class="rankings-hero"><div class="container"><div class="eyebrow reveal">KINGDOM 617 · MIGHTPULSE</div><h1 class="reveal">R<em>ANKINGS</em></h1><p class="reveal">Kingdom 617의 주요 랭킹을 확인할 수 있습니다. Alliance Power는 TOP 10, Personal Power와 Mystic Trial은 TOP 20을 표시합니다.</p></div></section>
+<section class="section" style="padding-top:10px"><div class="container">
+<div class="rank-tabs reveal"><button class="rank-tab active" data-ranking="alliance_power"><strong>ALLIANCE POWER</strong><span>TOP 10 · 연맹 파워</span></button><button class="rank-tab" data-ranking="personal_power"><strong>PERSONAL POWER</strong><span>TOP 20 · 개인 파워</span></button><button class="rank-tab" data-ranking="mystic_trial"><strong>MYSTIC TRIAL</strong><span>TOP 20 · 미스틱 트라이얼</span></button></div>
+<div class="rank-panel reveal"><div class="rank-panel-head"><div><h2 id="rankTitle">Alliance Power</h2><p id="rankSubtitle">Kingdom 617 · Top 10 Alliances</p></div><span class="rank-source">SOURCE · MIGHTPULSE</span></div><div id="rankList" class="rank-loading">MightPulse 데이터를 불러오는 중입니다.</div></div>
+<div class="rank-note">MightPulse 기준 데이터입니다. 원본 데이터의 갱신 시점에 따라 실제 게임 수치와 차이가 있을 수 있습니다.</div>
+</div></section></main>
+<script src="../../js/main.js"></script>
+<script>
+(function(){
+const tabs=[...document.querySelectorAll('.rank-tab')],list=document.getElementById('rankList'),title=document.getElementById('rankTitle'),subtitle=document.getElementById('rankSubtitle');
+const meta={
+ alliance_power:{title:'Alliance Power',sub:'Kingdom 617 · Top 10 Alliances'},
+ personal_power:{title:'Personal Power',sub:'Kingdom 617 · Top 20 Players'},
+ mystic_trial:{title:'Mystic Trial',sub:'Kingdom 617 · Top 20 Players'}
+};
+let data=null,current='alliance_power';
+function exact(n){return Number(n||0).toLocaleString('en-US')}
+function esc(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function render(){
+ const m=meta[current]; title.textContent=m.title; subtitle.textContent=m.sub;
+ const rows=data?.rankings?.[current]||[];
+ if(!rows.length){list.innerHTML='<div class="rank-empty">현재 해당 랭킹 데이터를 불러오지 못했습니다.<br>잠시 후 다시 확인해주세요.</div>';return}
+ list.innerHTML='<div class="rank-list">'+rows.map((r,i)=>{
+   const tag=current==='alliance_power'?(r.abbr||''):(r.abbr||'—');
+   const name=current==='alliance_power'?(r.name||'—'):(r.name||'—');
+   const value=exact(r.score);
+   const extra=current==='alliance_power'?'Alliance Power':(current==='personal_power'?'Personal Power':'Mystic Trial');
+   return '<div class="rank-row '+(i<3?'top-'+(i+1):'')+'"><div class="rank-num">'+(i+1)+'</div><div class="rank-name"><strong>'+esc(name)+'</strong><span><span class="rank-tag">['+esc(tag)+']</span>'+esc(current==='alliance_power'?'Kingdom 617':extra)+'</span></div><div class="rank-value">'+value+'</div></div>';
+ }).join('')+'</div>';
+}
+async function load(){try{const r=await fetch('../../api/kingdom-617',{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)throw new Error('API '+r.status);data=await r.json();if(data.error)throw new Error(data.error);render()}catch(e){list.innerHTML='<div class="rank-error">MightPulse 랭킹 데이터를 불러오지 못했습니다.<br>'+esc(e.message||'Unknown error')+'</div>'}}
+tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');current=t.dataset.ranking;render()}));load();
+})();
+</script>
+</body></html>
