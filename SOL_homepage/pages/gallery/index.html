@@ -3,9 +3,43 @@
 <button class="menu-btn" aria-label="메뉴">☰</button>
 <nav class="nav-links">
 <a href="../kingdom/index.html">왕국 소개</a><a href="../sol/index.html">SOL 소개</a><a href="../migration/index.html" class="nav-cta">이민 안내</a><a href="../gallery/index.html">갤러리</a>
-</nav></header><main><section class="page-hero"><div class="page-hero-inner reveal"><div class="eyebrow">SOL MOMENTS</div><h1>우리가 함께 만든<br><em>순간들.</em></h1><p>전투의 순간부터 아무것도 아닌 듯한 일상의 순간까지. SOL에서 함께한 기억을 하나씩 남겨갑니다.</p></div></section><section class="section alt"><div class="container"><div class="masonry">
-<div class="m-item reveal"><img src="/assets/images/sol-01.jpg" alt="SOL Moment 01" loading="lazy"></div>
-<div class="m-item reveal"><img src="/assets/images/sol-02.jpg" alt="SOL Moment 02" loading="lazy"></div>
-<div class="m-item reveal"><img src="/assets/images/sol-03.jpg" alt="SOL Moment 03" loading="lazy"></div>
-<div class="m-item reveal"><img src="/assets/images/sol-04.jpg" alt="SOL Moment 04" loading="lazy"></div>
-</div></div></section></main><footer class="footer"><div class="footer-inner"><div><div class="footer-brand">SOL</div><p>Together, At Our Own Pace.</p></div><div class="footer-right">Kingdom 617 · Korean Alliance<br>각자의 속도로, 함께.</div></div></footer><script src="../../js/main.js"></script></body></html>
+</nav></header><main><section class="page-hero"><div class="page-hero-inner reveal"><div class="eyebrow">SOL MOMENTS</div><h1>우리가 함께 만든<br><em>순간들.</em></h1><p>전투의 순간부터 아무것도 아닌 듯한 일상의 순간까지. SOL에서 함께한 기억을 하나씩 남겨갑니다.</p></div></section><section class="section alt"><div class="container"><div class="masonry" id="solGalleryGrid">
+  <div class="gallery-loading" id="galleryLoading">사진을 불러오는 중…</div>
+</div></div></section></main><footer class="footer"><div class="footer-inner"><div><div class="footer-brand">SOL</div><p>Together, At Our Own Pace.</p></div><div class="footer-right">Kingdom 617 · Korean Alliance<br>각자의 속도로, 함께.</div></div></footer><script>
+(() => {
+  const grid = document.getElementById('solGalleryGrid');
+  const loading = document.getElementById('galleryLoading');
+  if (!grid) return;
+
+  const maxPhotos = 200;
+  const checks = Array.from({length:maxPhotos}, (_,i) => {
+    const n = i + 1;
+    const src = `/assets/images/sol-${String(n).padStart(2,'0')}.jpg`;
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve({n, src, ok:true});
+      img.onerror = () => resolve({n, src, ok:false});
+      img.src = src;
+    });
+  });
+
+  Promise.all(checks).then(results => {
+    const photos = results.filter(x => x.ok);
+    grid.innerHTML = '';
+
+    if (!photos.length) {
+      grid.innerHTML = '<div class="gallery-empty">함께한 순간들이 이곳에 기록됩니다.</div>';
+      return;
+    }
+
+    photos.forEach(({n,src}) => {
+      const item = document.createElement('div');
+      item.className = 'm-item reveal';
+      item.innerHTML = `<img src="${src}" alt="SOL Moment ${String(n).padStart(2,'0')}" loading="lazy">`;
+      grid.appendChild(item);
+    });
+
+    if (window.initReveal) window.initReveal();
+  });
+})();
+</script>\n<script src="../../js/main.js"></script></body></html>
