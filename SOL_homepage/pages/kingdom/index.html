@@ -156,99 +156,59 @@
   const battleRate=document.getElementById('battleWinRate');
   const battleRecord=document.getElementById('battleWinRecord');
   if(!root)return;
-
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  const normalize=v=>String(v||'').toLowerCase().trim();
-
+  const norm=v=>String(v??'').toLowerCase().trim().replace(/[ _-]+/g,' ');
   const prepStatus=v=>{
-    v=normalize(v);
-    if(v==='won'||v==='win'||v==='conquered')return ['승리','win'];
-    if(v==='lost'||v==='loss'||v==='defeated')return ['패배','loss'];
+    const x=norm(v);
+    if(['won','win','victory'].includes(x))return ['승리','win'];
+    if(['lost','loss','defeat','defeated'].includes(x))return ['패배','loss'];
     return [v||'—',''];
   };
-
-  // MightPulse의 castle 값에서 held/defended는 방어 성공이므로 전투 승리로 계산한다.
+  // IMPORTANT: MightPulse 'Held' means the defending kingdom kept the castle, so it is a Battle WIN.
   const battleStatus=v=>{
-    v=normalize(v);
-    if(v==='won'||v==='win'||v==='conquered'||v==='held'||v==='defended')
-      return ['승리','win'];
-    if(v==='lost'||v==='loss'||v==='castle_lost'||v==='defeated')
-      return ['패배','loss'];
+    const x=norm(v);
+    if(['won','win','held','hold','defended','defence held','defense held'].includes(x))return ['승리','win'];
+    if(['lost','loss','castle lost','siege failed','defeated','defeat'].includes(x))return ['패배','loss'];
     return [v||'—',''];
   };
-
-  const setRate=(rateEl,recordEl,wins,losses)=>{
-    const total=wins+losses;
-    rateEl.textContent=total ? `${((wins/total)*100).toFixed(1)}%` : '—';
-    recordEl.innerHTML=total ? `<b>${wins}W</b> — <b>${losses}L</b>` : '—';
+  const setRate=(rateEl,recordEl,w,l)=>{
+    const total=w+l;
+    rateEl.textContent=total?`${((w/total)*100).toFixed(1)}%`:'—';
+    recordEl.innerHTML=total?`<b>${w}W</b> — <b>${l}L</b>`:'—';
   };
-
   try{
     const r=await fetch('../../api/kingdom-617');
     const data=await r.json();
     if(!r.ok)throw new Error(data.error||'API error');
-
     const raw=Array.isArray(data?.kvk?.history)?data.kvk.history:[];
+    // One row per KVK season; use every completed record currently supplied by MightPulse.
     const bySeason=new Map();
-
     raw.forEach(x=>{
       const season=Number(x?.season||0);
-      if(!season)return;
-      if(!bySeason.has(season))bySeason.set(season,x);
+      if(season&&!bySeason.has(season))bySeason.set(season,x);
     });
-
-    const allRows=[...bySeason.values()].sort((a,b)=>Number(b.season)-Number(a.season));
-    const latestSeason=allRows.length ? Number(allRows[0].season) : 0;
-
-    // 최신 KVK는 진행 중일 수 있으므로 승률 통계에서는 제외하고,
-    // 그 이전의 완료된 KVK 기록만 계산한다.
-    const completed=allRows.filter(x=>Number(x.season)!==latestSeason);
+    const rows=[...bySeason.values()].sort((a,b)=>Number(b.season)-Number(a.season));
 
     let prepW=0,prepL=0,battleW=0,battleL=0;
-
-    completed.forEach(x=>{
-      const prep=prepStatus(x.prep)[1];
-      const battle=battleStatus(x.castle)[1];
-
-      if(prep==='win')prepW++;
-      else if(prep==='loss')prepL++;
-
-      if(battle==='win')battleW++;
-      else if(battle==='loss')battleL++;
+    rows.forEach(x=>{
+      const p=prepStatus(x.prep)[1];
+      const b=battleStatus(x.castle)[1];
+      if(p==='win')prepW++; else if(p==='loss')prepL++;
+      if(b==='win')battleW++; else if(b==='loss')battleL++;
     });
-
     setRate(prepRate,prepRecord,prepW,prepL);
     setRate(battleRate,battleRecord,battleW,battleL);
 
-    // 화면에는 최신 KVK 8개만 표시
-    const rows=allRows.slice(0,8);
-
-    if(!rows.length){
-      root.innerHTML='<div class="kvk-mini-empty">아직 표시할 KVK 기록이 없습니다.</div>';
-      return;
-    }
-
-    root.innerHTML=rows.map(x=>{
-      const prep=prepStatus(x.prep);
-      const battle=battleStatus(x.castle);
-      const castle=normalize(x.castle);
-      const battleLabel=(castle==='held'||castle==='defended')
-        ? '캐슬 방어'
-        : `캐슬 ${battle[0]}`;
-
-      return `<div class="kvk-mini-row">
-        <div class="kvk-season">KVK <strong>${esc(x.season)}</strong></div>
-        <div class="kvk-opponent">vs <strong>Kingdom ${esc(x.opponent_kid||'—')}</strong></div>
-        <div class="kvk-result">
-          <span class="kvk-pill ${prep[1]}">준비 ${prep[0]}</span>
-          <span class="kvk-pill ${battle[1]}">${esc(battleLabel)}</span>
-        </div>
-      </div>`;
+    const latest=rows.slice(0,8);
+    if(!latest.length){root.innerHTML='<div class="kvk-mini-empty">아직 표시할 KVK 기록이 없습니다.</div>';return;}
+    root.innerHTML=latest.map(x=>{
+      const p=prepStatus(x.prep), b=battleStatus(x.castle);
+      const castle=norm(x.castle);
+      const battleLabel=(castle==='held'||castle==='hold'||castle==='defended'||castle==='defence held'||castle==='defense held')?'캐슬 방어':`캐슬 ${b[0]}`;
+      return `<div class="kvk-mini-row"><div class="kvk-season">KVK <strong>${esc(x.season)}</strong></div><div class="kvk-opponent">vs <strong>Kingdom ${esc(x.opponent_kid||'—')}</strong></div><div class="kvk-result"><span class="kvk-pill ${p[1]}">준비 ${p[0]}</span><span class="kvk-pill ${b[1]}">${esc(battleLabel)}</span></div></div>`;
     }).join('');
   }catch(e){
     root.innerHTML='<div class="kvk-mini-empty">KVK 기록을 불러오지 못했습니다.</div>';
-    [prepRate,battleRate].forEach(el=>{if(el)el.textContent='—';});
-    [prepRecord,battleRecord].forEach(el=>{if(el)el.textContent='—';});
   }
 })();
 </script>
