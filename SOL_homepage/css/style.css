@@ -153,3 +153,35 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;z-
 @media(max-width:850px){
   .hero-card,.value-card,.feature,.info-card,.apply-card,.apply-side,.step,.gallery-tile,.m-item{box-shadow:0 12px 34px rgba(83,61,31,.09),inset 0 1px 0 rgba(255,255,255,.72)}
 }
+
+/* =========================================================
+   KINGDOM 617 PAGE — SOL EDITORIAL / GOLD GLASS
+   ========================================================= */
+.kingdom-page-hero{padding-bottom:95px;background:radial-gradient(circle at 75% 38%,rgba(255,248,226,.82),transparent 32%),linear-gradient(180deg,rgba(255,252,246,.5),rgba(245,239,228,.25))}
+.kingdom-page-hero .page-hero-inner{max-width:1100px}
+.kingdom-page-hero h1{font-family:'DM Serif Display',serif;font-size:clamp(58px,8vw,104px);line-height:.98;font-weight:400;letter-spacing:-.045em;margin:0;color:#2e2923}
+.kingdom-page-hero h1 em{font-style:italic;color:#9b7a4b}
+.kingdom-page-hero p{max-width:690px;margin:28px 0 0;color:#71685d;font-size:15px;line-height:2;word-break:keep-all}
+.kingdom-hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:28px}
+.kingdom-hero-tags span{padding:8px 13px;border:1px solid rgba(169,132,72,.24);border-radius:999px;background:rgba(255,252,245,.58);color:#8a6d43;font-size:11px;box-shadow:inset 0 1px rgba(255,255,255,.75),0 7px 20px rgba(83,61,31,.05);backdrop-filter:blur(10px)}
+.kingdom-story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kingdom-story-card{--mx:50%;--my:50%;position:relative;overflow:hidden;min-height:350px;padding:34px 30px;border:1px solid rgba(169,132,72,.28);border-radius:28px;background:linear-gradient(145deg,rgba(255,253,248,.78),rgba(240,229,211,.45));box-shadow:0 18px 48px rgba(83,61,31,.09),inset 0 1px rgba(255,255,255,.8);backdrop-filter:blur(14px);transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s ease,border-color .45s ease}
+.kingdom-story-card:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--mx) var(--my),rgba(255,249,229,.55),transparent 36%),linear-gradient(135deg,rgba(255,255,255,.3),transparent 35%,transparent 70%,rgba(201,164,96,.08));opacity:.9}
+.kingdom-story-card:after{content:"";position:absolute;top:-90%;left:-50%;width:30%;height:260%;transform:rotate(25deg) translateX(-200%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);filter:blur(2px);transition:transform .9s ease;pointer-events:none}
+.kingdom-story-card:hover{transform:translateY(-8px);border-color:rgba(183,149,93,.7);box-shadow:0 28px 68px rgba(83,61,31,.16),inset 0 1px rgba(255,255,255,.92),0 0 28px rgba(183,149,93,.08)}
+.kingdom-story-card:hover:after{transform:rotate(25deg) translateX(520%)}
+.story-icon{position:relative;z-index:2;width:43px;height:43px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(183,149,93,.38);background:rgba(255,249,235,.65);color:#a17e4d;font-size:18px;box-shadow:inset 0 1px rgba(255,255,255,.8),0 7px 18px rgba(93,67,31,.08)}
+.story-no{position:relative;z-index:2;margin-top:26px;font-size:10px;letter-spacing:.2em;color:#ad8a55;font-weight:700}
+.kingdom-story-card h3{position:relative;z-index:2;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;margin:9px 0 12px;letter-spacing:-.02em}
+.kingdom-story-card p{position:relative;z-index:2;margin:0;color:#766d61;font-size:12.5px;line-height:1.95;word-break:keep-all}
+.kingdom-principles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.principle-glass{--mx:50%;--my:50%;position:relative;overflow:hidden;padding:28px 25px;border-radius:23px;border:1px solid rgba(169,132,72,.25);background:rgba(255,252,246,.58);box-shadow:inset 0 1px rgba(255,255,255,.8),0 14px 38px rgba(83,61,31,.07);transition:.4s ease}
+.principle-glass:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--mx) var(--my),rgba(255,249,228,.52),transparent 45%);pointer-events:none}
+.principle-glass:hover{transform:translateY(-6px);border-color:rgba(183,149,93,.62);box-shadow:inset 0 1px rgba(255,255,255,.9),0 22px 48px rgba(83,61,31,.13),0 0 24px rgba(183,149,93,.08)}
+.principle-glass span{position:relative;z-index:1;font-size:10px;letter-spacing:.18em;color:#b7955d}.principle-glass strong{position:relative;z-index:1;display:block;font-family:'DM Serif Display',serif;font-weight:400;font-size:28px;margin:15px 0 7px}.principle-glass p{position:relative;z-index:1;margin:0;color:#766d61;font-size:12px;line-height:1.8;word-break:keep-all}
+.kingdom-record{position:relative;overflow:hidden;padding:46px 48px;border-radius:32px;border:1px solid rgba(169,132,72,.3);background:linear-gradient(135deg,rgba(255,252,245,.78),rgba(237,226,208,.5));box-shadow:0 22px 58px rgba(83,61,31,.1),inset 0 1px rgba(255,255,255,.82);backdrop-filter:blur(14px)}
+.kingdom-record:before{content:"";position:absolute;width:330px;height:330px;right:-100px;top:-150px;border-radius:50%;background:radial-gradient(circle,rgba(221,193,143,.28),transparent 67%);pointer-events:none}
+.record-top{position:relative;z-index:1;display:flex;align-items:end;justify-content:space-between;gap:20px}.kingdom-record h2{font-family:'DM Serif Display',serif;font-size:48px;font-weight:400;line-height:1;margin:10px 0 0}.record-date{font-family:'DM Serif Display',serif;font-size:32px;color:#9a7849;white-space:nowrap}.record-line{height:1px;margin:30px 0;background:linear-gradient(90deg,rgba(183,149,93,.55),rgba(183,149,93,.08))}.record-line span{display:block;width:78px;height:3px;margin-top:-1px;background:#b7955d}.kingdom-record>p{position:relative;z-index:1;max-width:800px;margin:0;color:#756c60;font-size:13px;line-height:2;word-break:keep-all}
+.kingdom-hub-card{min-height:280px;background:linear-gradient(135deg,rgba(255,252,246,.84),rgba(232,219,198,.52))}
+@media(max-width:850px){.kingdom-story-grid{grid-template-columns:1fr 1fr}.kingdom-principles-grid{grid-template-columns:1fr 1fr}.kingdom-record{padding:34px}.record-top{align-items:start;flex-direction:column}.record-date{font-size:25px}.kingdom-page-hero{padding-top:150px}}
+@media(max-width:560px){.kingdom-story-grid,.kingdom-principles-grid{grid-template-columns:1fr}.kingdom-story-card{min-height:300px;padding:28px 24px}.kingdom-page-hero h1{font-size:58px}.kingdom-page-hero p{font-size:13px}.kingdom-record{padding:28px 24px;border-radius:25px}.kingdom-record h2{font-size:40px}.record-date{font-size:23px}.kingdom-hero-tags span{font-size:10px;padding:7px 11px}}
