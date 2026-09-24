@@ -3,59 +3,44 @@
 <button class="menu-btn" aria-label="메뉴">☰</button>
 <nav class="nav-links">
 <a href="../kingdom/index.html">왕국 소개</a><a href="../sol/index.html">SOL 소개</a><a href="../migration/index.html" class="nav-cta">이민 안내</a><a href="../gallery/index.html">갤러리</a>
-</nav></header><main><section class="page-hero"><div class="page-hero-inner reveal"><div class="eyebrow">SOL MOMENTS</div><h1>우리가 함께 만든<br><em>순간들.</em></h1><p>전투의 순간부터 아무것도 아닌 듯한 일상의 순간까지. SOL에서 함께한 기억을 하나씩 남겨갑니다.</p></div></section><section class="section alt"><div class="container"><div class="masonry">
-<div class="m-item reveal"><img src="/assets/images/sol-01.jpg" alt="SOL Moment 01" loading="lazy"></div>
-<div class="m-item reveal"><img src="/assets/images/sol-02.jpg" alt="SOL Moment 02" loading="lazy"></div>
-<div class="m-item reveal"><img src="/assets/images/sol-03.jpg" alt="SOL Moment 03" loading="lazy"></div>
-<div class="m-item reveal"><img src="/assets/images/sol-04.jpg" alt="SOL Moment 04" loading="lazy"></div>
-</div></div></section></main><footer class="footer"><div class="footer-inner"><div><div class="footer-brand">SOL</div><p>Together, At Our Own Pace.</p></div><div class="footer-right">Kingdom 617 · Korean Alliance<br>각자의 속도로, 함께.</div></div></footer><script>
+</nav></header><main><section class="page-hero"><div class="page-hero-inner reveal"><div class="eyebrow">SOL MOMENTS</div><h1>우리가 함께 만든<br><em>순간들.</em></h1><p>전투의 순간부터 아무것도 아닌 듯한 일상의 순간까지. SOL에서 함께한 기억을 하나씩 남겨갑니다.</p></div></section><section class="section alt"><div class="container"><div class="masonry" id="solGalleryGrid"><div class="gallery-loading">사진을 불러오는 중…</div></div></div></section></main><footer class="footer"><div class="footer-inner"><div><div class="footer-brand">SOL</div><p>Together, At Our Own Pace.</p></div><div class="footer-right">Kingdom 617 · Korean Alliance<br>각자의 속도로, 함께.</div></div></footer><style>
+.gallery-loading,.gallery-empty{padding:48px 20px;text-align:center;color:#8b6a2b;font-size:.9rem;grid-column:1/-1}
+.m-item{cursor:zoom-in;overflow:hidden;border-radius:18px;position:relative}
+.m-item img{display:block;width:100%;height:auto;transition:transform .55s cubic-bezier(.2,.7,.2,1),filter .35s ease}
+.m-item:hover img{transform:scale(1.025);filter:brightness(1.03)}
+.sol-lightbox{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(28,23,16,.84);backdrop-filter:blur(14px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
+.sol-lightbox.open{opacity:1;visibility:visible}
+.sol-lightbox img{max-width:min(94vw,1400px);max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.38)}
+.sol-lightbox-close{position:absolute;top:18px;right:20px;width:44px;height:44px;border:1px solid rgba(255,255,255,.45);border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:25px;line-height:1;cursor:pointer}
+.sol-lightbox-hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.78);font-size:12px;letter-spacing:.06em}
+@media(max-width:640px){.sol-lightbox{padding:12px}.sol-lightbox img{max-width:96vw;max-height:82vh}.sol-lightbox-close{top:12px;right:12px}.m-item{border-radius:13px}}
+</style>
+<div class="sol-lightbox" id="solLightbox" aria-hidden="true"><button class="sol-lightbox-close" id="solLightboxClose" aria-label="닫기">×</button><img id="solLightboxImage" alt="SOL Moment"><div class="sol-lightbox-hint">TAP OUTSIDE TO CLOSE</div></div>
+<script>
 (() => {
-  const grid = document.getElementById('solGalleryGrid');
-  if (!grid) return;
-
-  // gallery/index.html 기준: ../../assets/images/
-  // sol-01.jpg 형식과 sol-1.jpg 형식을 모두 지원합니다.
-  const base = '../../assets/images/';
-  const maxPhotos = 200;
-
-  const loadImage = (src, n) => new Promise(resolve => {
-    const img = new Image();
-    img.onload = () => resolve({src, n});
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-
-  const jobs = [];
-  for (let n = 1; n <= maxPhotos; n++) {
-    const padded = String(n).padStart(2, '0');
-    jobs.push(loadImage(`${base}sol-${padded}.jpg`, n));
-    jobs.push(loadImage(`${base}sol-${n}.jpg`, n));
-  }
-
-  Promise.all(jobs).then(results => {
-    const seen = new Set();
-    const photos = results.filter(Boolean).filter(x => {
-      if (seen.has(x.n)) return false;
-      seen.add(x.n);
-      return true;
-    }).sort((a,b) => a.n - b.n);
-
-    grid.innerHTML = '';
-
-    if (!photos.length) {
-      grid.innerHTML = '<div class="gallery-empty">함께한 순간들이 이곳에 기록됩니다.</div>';
-      return;
+  const grid=document.getElementById('solGalleryGrid');
+  const lightbox=document.getElementById('solLightbox');
+  const lbImg=document.getElementById('solLightboxImage');
+  const closeBtn=document.getElementById('solLightboxClose');
+  if(!grid)return;
+  const base='../../assets/images/';
+  const max=200;
+  const load=(src,n)=>new Promise(resolve=>{const im=new Image();im.onload=()=>resolve({src,n});im.onerror=()=>resolve(null);im.src=src;});
+  const findPhoto=async n=>{const padded=String(n).padStart(2,'0');const a=await load(base+'sol-'+padded+'.jpg',n);return a||await load(base+'sol-'+n+'.jpg',n)};
+  (async()=>{
+    const photos=[]; let misses=0;
+    for(let n=1;n<=max;n++){
+      const p=await findPhoto(n);
+      if(p){photos.push(p);misses=0;} else {misses++;if(n>10&&misses>=8)break;}
     }
-
-    photos.forEach(({src, n}) => {
-      const item = document.createElement('div');
-      item.className = 'm-item reveal';
-      item.innerHTML = `<img src="${src}" alt="SOL Moment ${String(n).padStart(2,'0')}" loading="lazy">`;
-      grid.appendChild(item);
-    });
-
-    if (window.initReveal) window.initReveal();
-  });
+    grid.innerHTML='';
+    if(!photos.length){grid.innerHTML='<div class="gallery-empty">함께한 순간들이 이곳에 기록됩니다.</div>';return;}
+    photos.forEach(p=>{const item=document.createElement('div');item.className='m-item reveal';const img=document.createElement('img');img.src=p.src;img.alt='SOL Moment '+String(p.n).padStart(2,'0');img.loading='lazy';item.appendChild(img);item.addEventListener('click',()=>{lbImg.src=p.src;lbImg.alt=img.alt;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';});grid.appendChild(item);});
+    if(window.initReveal)window.initReveal();
+  })();
+  const close=()=>{lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');lbImg.removeAttribute('src');document.body.style.overflow='';};
+  closeBtn.addEventListener('click',e=>{e.stopPropagation();close();});
+  lightbox.addEventListener('click',e=>{if(e.target===lightbox)close();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lightbox.classList.contains('open'))close();});
 })();
-</script>
-<script src="../../js/main.js"></script></body></html>
+</script><script src="../../js/main.js"></script></body></html>
