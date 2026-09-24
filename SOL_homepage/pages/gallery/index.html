@@ -99,16 +99,16 @@
 </nav></header><main><section class="page-hero"><div class="page-hero-inner reveal"><div class="eyebrow">SOL MOMENTS</div><h1>우리가 함께 만든<br><em>순간들.</em></h1><p>전투의 순간부터 아무것도 아닌 듯한 일상의 순간까지. SOL에서 함께한 기억을 하나씩 남겨갑니다.</p></div></section><section class="section alt"><div class="container"><div class="masonry" id="solGalleryGrid">
 
       <button class="sol-gallery-item has-image" type="button" aria-label="SOL Moment 01">
-        <img src="../../assets/images/sol-01.jpg" alt="SOL Moment 01" loading="lazy">
+        <img src="/assets/images/sol-01.jpg" alt="SOL Moment 01">
       </button>
       <button class="sol-gallery-item has-image" type="button" aria-label="SOL Moment 02">
-        <img src="../../assets/images/sol-02.jpg" alt="SOL Moment 02" loading="lazy">
+        <img src="/assets/images/sol-02.jpg" alt="SOL Moment 02">
       </button>
       <button class="sol-gallery-item has-image" type="button" aria-label="SOL Moment 03">
-        <img src="../../assets/images/sol-03.jpg" alt="SOL Moment 03" loading="lazy">
+        <img src="/assets/images/sol-03.jpg" alt="SOL Moment 03">
       </button>
       <button class="sol-gallery-item has-image" type="button" aria-label="SOL Moment 04">
-        <img src="../../assets/images/sol-04.jpg" alt="SOL Moment 04" loading="lazy">
+        <img src="/assets/images/sol-04.jpg" alt="SOL Moment 04">
       </button>
       <button class="sol-gallery-item empty" type="button" aria-label="SOL Moment 05">
         <span class="sol-gallery-placeholder"><span class="sol-placeholder-logo">SOL</span><span class="sol-placeholder-line">A MOMENT TO REMEMBER</span></span>
@@ -178,7 +178,7 @@
   const lbImg=document.getElementById('solLightboxImage');
   const closeBtn=document.getElementById('solLightboxClose');
   if(!grid)return;
-  const base='../../assets/images/';
+  const base='/assets/images/';
   const max=200;
   const load=(src,n)=>new Promise(resolve=>{const im=new Image();im.onload=()=>resolve({src,n});im.onerror=()=>resolve(null);im.src=src;});
   const findPhoto=async n=>{const padded=String(n).padStart(2,'0');const a=await load(base+'sol-'+padded+'.jpg',n);return a||await load(base+'sol-'+n+'.jpg',n)};
@@ -202,45 +202,50 @@
 
 
 
+
+
+
 <script>
-(() => {
+document.addEventListener('DOMContentLoaded', function () {
   const grid = document.getElementById('solGalleryGrid');
   if (!grid) return;
 
   const lightbox = document.createElement('div');
   lightbox.className = 'sol-lightbox';
-  lightbox.innerHTML = `
-    <button class="sol-lightbox-close" type="button" aria-label="Close">×</button>
-    <div class="sol-lightbox-inner"><img class="sol-lightbox-image" alt=""></div>`;
+  lightbox.innerHTML =
+    '<button class="sol-lightbox-close" type="button" aria-label="Close">×</button>' +
+    '<div class="sol-lightbox-inner"><img class="sol-lightbox-image" alt=""></div>';
   document.body.appendChild(lightbox);
 
   const image = lightbox.querySelector('.sol-lightbox-image');
 
-  function closeLightbox(){
+  function closeLightbox() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
     image.removeAttribute('src');
   }
 
-  grid.addEventListener('click', (event) => {
+  grid.addEventListener('click', function (event) {
     const item = event.target.closest('.sol-gallery-item.has-image');
     if (!item) return;
     const img = item.querySelector('img');
     if (!img) return;
-    image.src = img.src;
-    image.alt = img.alt;
+    image.src = img.currentSrc || img.src;
+    image.alt = img.alt || '';
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
   });
 
-  lightbox.addEventListener('click', (event) => {
-    if (event.target === lightbox || event.target.closest('.sol-lightbox-close')) closeLightbox();
+  lightbox.addEventListener('click', function (event) {
+    if (event.target === lightbox || event.target.closest('.sol-lightbox-close')) {
+      closeLightbox();
+    }
   });
 
-  document.addEventListener('keydown', (event) => {
+  document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') closeLightbox();
   });
-})();
+});
 </script>
 
 <script src="../../js/main.js"></script></body></html>
