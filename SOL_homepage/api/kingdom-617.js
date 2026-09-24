@@ -8,7 +8,7 @@ async function readJson(response) {
 function normalizeRows(rows) {
   if (!Array.isArray(rows)) return [];
   return rows.filter(r => r && (r.opponent_kid != null || r.season != null || r.result)).map(r => ({
-    opponent_kid:Number(r.opponent_kid ?? 0), prep:r.prep||"", castle:r.castle||"", result:r.result||"", label:r.label||"",
+    opponent_kid:Number(r.opponent_kid ?? 0), prep:r.prep||r.prep_result||r.preparation||r.preparation_result||"", castle:r.castle||r.castle_result||r.battle||r.battle_result||"", result:r.result||"", label:r.label||"",
     season:Number(r.season ?? 0), appointed_at:Number(r.appointed_at ?? r.first_at ?? r.begin_ts ?? 0), nick_name:r.nick_name||"—",
     alliance_abbr:r.alliance_abbr||"", role:r.role||(r.high_king?"High King":"King"), high_king:Boolean(r.high_king), avatar_url:r.avatar_url||""
   })).sort((a,b)=>(b.season-a.season)||(b.appointed_at-a.appointed_at));
