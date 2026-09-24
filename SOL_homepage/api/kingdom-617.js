@@ -23,6 +23,77 @@ function extractHistory(data){
   const candidates=[...findArraysByKey(data,"history"),...findArraysByKey(data,"cycles")];
   return candidates.map(normalizeRows).filter(Boolean).sort((a,b)=>b.length-a.length)[0]||[];
 }
+
+function first(obj, keys, fallback="") {
+  if (!obj || typeof obj !== "object") return fallback;
+  for (const k of keys) {
+    if (obj[k] !== undefined && obj[k] !== null && obj[k] !== "") return obj[k];
+  }
+  return fallback;
+}
+function num(v) {
+  if (typeof v === "number") return v;
+  if (typeof v !== "string") return 0;
+  const n=parseFloat(v.replace(/,/g,""));
+  return Number.isFinite(n) ? n : 0;
+}
+function allObjects(value, out=[], depth=0) {
+  if (!value || typeof value !== "object" || depth>8) return out;
+  if (Array.isArray(value)) { for (const x of value) allObjects(x,out,depth+1); return out; }
+  out.push(value);
+  for (const v of Object.values(value)) if (v && typeof v === "object") allObjects(v,out,depth+1);
+  return out;
+}
+function findCandidateArrays(value, out=[], depth=0) {
+  if (!value || typeof value !== "object" || depth>8) return out;
+  if (Array.isArray(value)) {
+    if (value.length && value.some(x=>x && typeof x === "object")) out.push(value);
+    for (const x of value) findCandidateArrays(x,out,depth+1);
+    return out;
+  }
+  for (const [k,v] of Object.entries(value)) {
+    if (Array.isArray(v) && v.length && v.some(x=>x && typeof x === "object")) out.push({key:k,items:v});
+    findCandidateArrays(v,out,depth+1);
+  }
+  return out;
+}
+function extractRankings(data) {
+  const candidates=findCandidateArrays(data);
+  const players=[], alliances=[], mystic=[];
+  const seenP=new Set(), seenA=new Set(), seenM=new Set();
+  for (const c of candidates) {
+    const items=(Array.isArray(c)?c:c.items||[]).filter(x=>x&&typeof x==='object');
+    const key=String(Array.isArray(c)?'':(c.key||'')).toLowerCase();
+    if(!items.length) continue;
+    const allianceContext=/alliance|alliances/.test(key);
+    const playerContext=/player|players|governor|governors|leaderboard|rankings|ranking/.test(key);
+    for(const r of items){
+      const name=String(first(r,["nick_name","nickname","player_name","governor_name","player","governor"],"")).trim();
+      const alliance=String(first(r,["alliance_abbr","alliance_tag","abbr","tag","alliance_name"],"")).trim();
+      const power=num(first(r,["power","governor_power","player_power","total_power","might"],0));
+      const mysticScore=num(first(r,["mystic_trial","mysticTrial","mystic_score","mystic","mystic_points"],0));
+      const avatar=first(r,["avatar_url","avatar","image"],"");
+      const id=String(first(r,["id","player_id","governor_id"],name+"|"+alliance));
+      const allianceName=String(first(r,["alliance_abbr","abbr","tag","alliance_name","name"],"")).trim();
+      const alliancePower=num(first(r,["alliance_power","power","total_power"],0));
+
+      if((allianceContext || (!playerContext && allianceName && alliancePower>0 && !name)) && allianceName && alliancePower>0 && !seenA.has(allianceName)){
+        seenA.add(allianceName); alliances.push({name:allianceName,power:alliancePower,avatar});
+      }
+      if((playerContext || (!allianceContext && name)) && name && power>0 && !seenP.has(id)){
+        seenP.add(id); players.push({name,alliance,power,avatar});
+      }
+      if((playerContext || /mystic/.test(key)) && name && mysticScore>0 && !seenM.has(id)){
+        seenM.add(id); mystic.push({name,alliance,score:mysticScore,avatar});
+      }
+    }
+  }
+  players.sort((a,b)=>b.power-a.power);
+  mystic.sort((a,b)=>b.score-a.score);
+  alliances.sort((a,b)=>b.power-a.power);
+  return {alliance_power:alliances.slice(0,10),personal_power:players.slice(0,20),mystic_trial:mystic.slice(0,20)};
+}
+
 export default async function handler(req,res){
   if(req.method!=="GET") return res.status(405).json({error:"Method not allowed"});
   const key=process.env.MIGHTPULSE_API_KEY;
@@ -37,7 +108,8 @@ export default async function handler(req,res){
     const kingdom=data?.kingdom||data?.data||data;
     const matchup=webData?.kvk_matchup||webData?.data?.kvk_matchup||{};
     const history=extractHistory(webData);
+    const rankings=extractRankings(webData);
     res.setHeader("Cache-Control","s-maxage=1800, stale-while-revalidate=3600");
-    return res.status(200).json({kingdom:617,name:kingdom?.name||"617",kvk:{season:Number(matchup?.season??0),opponent_kid:Number(matchup?.opponent?.kid??0),history},fetched_at:new Date().toISOString(),source:"MightPulse"});
+    return res.status(200).json({kingdom:617,name:kingdom?.name||"617",kvk:{season:Number(matchup?.season??0),opponent_kid:Number(matchup?.opponent?.kid??0),history},rankings,fetched_at:new Date().toISOString(),source:"MightPulse"});
   }catch(err){ return res.status(500).json({error:"Unexpected kingdom server error.",detail:String(err?.message||err)}); }
 }
