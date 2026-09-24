@@ -23,7 +23,6 @@ function extractHistory(data){
   const candidates=[...findArraysByKey(data,"history"),...findArraysByKey(data,"cycles")];
   return candidates.map(normalizeRows).filter(Boolean).sort((a,b)=>b.length-a.length)[0]||[];
 }
-
 function first(obj, keys, fallback="") {
   if (!obj || typeof obj !== "object") return fallback;
   for (const k of keys) {
@@ -136,28 +135,34 @@ function normalizePlayerBoard(data, field) {
   })).filter(r => r.name !== "—" && r.score > 0).slice(0, 20);
 }
 
+
 export default async function handler(req,res){
   if(req.method!=="GET") return res.status(405).json({error:"Method not allowed"});
   const key=process.env.MIGHTPULSE_API_KEY;
   if(!key) return res.status(500).json({error:"MIGHTPULSE_API_KEY is not configured in Vercel."});
   try{
-    const [allianceData, personalData, mysticData] = await Promise.all([
-      fetchBoard("alliance_power", 10, key),
-      fetchBoard("personal_power", 20, key),
-      fetchBoard("mystic_trial", 20, key)
+    const [kingdomResponse,webResponse,allianceData,personalData,mysticData]=await Promise.all([
+      fetch(`${API}/kingdoms/617`,{headers:{Authorization:`Bearer ${key}`,Accept:"application/json"}}),
+      fetch(`${WEB_API}/kingdoms/617?players=100&alliances=100`,{headers:{Accept:"application/json, text/plain, */*",Referer:"https://mightpulse.com/kingdom/617",Origin:"https://mightpulse.com","User-Agent":"Mozilla/5.0"}}),
+      fetchBoard("alliance_power",10,key),
+      fetchBoard("personal_power",20,key),
+      fetchBoard("mystic_trial",20,key)
     ]);
+    const data=await readJson(kingdomResponse), webData=await readJson(webResponse);
+    if(!kingdomResponse.ok) return res.status(kingdomResponse.status).json({error:"MightPulse kingdom request failed."});
+    const kingdom=data?.kingdom||data?.data||data;
+    const matchup=webData?.kvk_matchup||webData?.data?.kvk_matchup||{};
+    const history=extractHistory(webData);
     res.setHeader("Cache-Control","s-maxage=1800, stale-while-revalidate=3600");
     return res.status(200).json({
-      kingdom: 617,
-      rankings: {
-        alliance_power: normalizeAllianceBoard(allianceData),
-        personal_power: normalizePlayerBoard(personalData, "power"),
-        mystic_trial: normalizePlayerBoard(mysticData, "mystic_trial")
+      kingdom:617, name:kingdom?.name||"617",
+      kvk:{season:Number(matchup?.season??0),opponent_kid:Number(matchup?.opponent?.kid??0),history},
+      rankings:{
+        alliance_power:normalizeAllianceBoard(allianceData),
+        personal_power:normalizePlayerBoard(personalData,"power"),
+        mystic_trial:normalizePlayerBoard(mysticData,"mystic_trial")
       },
-      fetched_at:new Date().toISOString(),
-      source:"MightPulse"
+      fetched_at:new Date().toISOString(),source:"MightPulse"
     });
-  }catch(err){
-    return res.status(502).json({error:"MightPulse ranking request failed.",detail:String(err?.message||err)});
-  }
+  }catch(err){ return res.status(500).json({error:"Unexpected kingdom server error.",detail:String(err?.message||err)}); }
 }
