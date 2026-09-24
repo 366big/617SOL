@@ -4,38 +4,49 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#efe3cf">
-<title>SOL · Welcome</title>
+<title>SOL · Together, At Our Own Pace.</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+KR:wght@400;500;600&display=swap');
-:root{--gold:#a87b35;--gold2:#d7b36d;--cream:#f8f0e2;--ink:#4a3620}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eee2cf}
+:root{--gold:#a87b35;--gold2:#d7b36d;--ink:#4a3620}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eee2cf}
 body{font-family:'Noto Sans KR',sans-serif;color:var(--ink)}
 .entrance{position:relative;width:100%;height:100%;min-height:100svh;isolation:isolate;background:#eee2cf}
-.entrance-bg{position:absolute;inset:0;background-image:url('assets/images/sol-entrance.png');background-size:cover;background-position:center center;transform:scale(1.035);opacity:0;animation:bgIn 1.8s cubic-bezier(.2,.75,.2,1) forwards;}
+.entrance-bg{position:absolute;inset:0;background-image:url('assets/images/sol-entrance.png');background-size:cover;background-position:center center;transform:scale(1.035);opacity:0;animation:bgIn 1.8s cubic-bezier(.2,.75,.2,1) forwards}
 .entrance-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,248,234,.05),rgba(255,248,234,.02) 55%,rgba(85,53,17,.10));pointer-events:none}
 .vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 44%,transparent 25%,rgba(86,57,24,.10) 100%);opacity:.75}
-.content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;z-index:2;pointer-events:none}
-.welcome{margin-top:clamp(150px,20vh,230px);font-family:'DM Serif Display',serif;font-size:clamp(30px,4.4vw,60px);font-weight:400;letter-spacing:.26em;color:#8e642b;text-shadow:0 2px 15px rgba(255,248,230,.85);opacity:0;transform:translateY(16px);animation:welcomeIn 1s .95s cubic-bezier(.2,.8,.2,1) forwards}
-.welcome:before,.welcome:after{content:"";display:inline-block;width:clamp(28px,6vw,90px);height:1px;background:linear-gradient(90deg,transparent,var(--gold2));vertical-align:middle;margin:0 18px 7px 0;opacity:.85}
-.welcome:after{background:linear-gradient(90deg,var(--gold2),transparent);margin:0 0 7px 18px}
-.enter-btn{pointer-events:auto;position:relative;margin-top:clamp(28px,4vh,48px);min-width:230px;height:64px;padding:0 38px;border:1px solid rgba(168,123,53,.65);border-radius:999px;background:linear-gradient(180deg,rgba(255,250,239,.94),rgba(241,220,181,.86));color:#5d411d;font:600 15px 'Noto Sans KR',sans-serif;letter-spacing:.08em;box-shadow:0 12px 35px rgba(113,76,24,.22),inset 0 1px 0 rgba(255,255,255,.95);opacity:0;transform:translateY(18px) scale(.97);animation:buttonIn .9s 2s cubic-bezier(.2,.85,.2,1) forwards;transition:transform .25s ease,box-shadow .25s ease,background .25s ease}
-.enter-btn:before{content:"";position:absolute;inset:5px;border:1px solid rgba(168,123,53,.28);border-radius:999px;pointer-events:none}
+.content{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;text-align:center;padding:20px 20px clamp(72px,9vh,110px);z-index:2;pointer-events:none}
+.enter-btn{pointer-events:auto;position:relative;min-width:230px;height:64px;padding:0 38px;border:1px solid rgba(168,123,53,.72);border-radius:999px;background:linear-gradient(180deg,rgba(255,250,239,.96),rgba(241,220,181,.88));color:#5d411d;font:600 15px 'Noto Sans KR',sans-serif;letter-spacing:.08em;box-shadow:0 12px 35px rgba(113,76,24,.22),inset 0 1px 0 rgba(255,255,255,.95),0 0 0 1px rgba(255,255,255,.35);opacity:0;transform:translateY(18px) scale(.97);animation:buttonIn .9s 1.75s cubic-bezier(.2,.85,.2,1) forwards;transition:transform .25s ease,box-shadow .25s ease,background .25s ease}
+.enter-btn:before{content:"";position:absolute;inset:5px;border:1px solid rgba(168,123,53,.32);border-radius:999px;pointer-events:none}
+.enter-btn:after{content:"";position:absolute;top:-80%;left:-35%;width:30%;height:260%;transform:rotate(25deg) translateX(-180%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.62),transparent);filter:blur(2px);opacity:0;transition:transform .8s ease,opacity .3s ease;pointer-events:none}
 .enter-btn span{display:inline-block;margin-left:9px;font-family:Georgia,serif;font-size:20px;vertical-align:-1px}
-.enter-btn:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 17px 42px rgba(113,76,24,.28),inset 0 1px 0 rgba(255,255,255,.95);background:linear-gradient(180deg,#fffaf0,#efd9ae)}
+.enter-btn:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 17px 42px rgba(113,76,24,.28),inset 0 1px 0 rgba(255,255,255,.95),0 0 25px rgba(183,149,93,.16);background:linear-gradient(180deg,#fffaf0,#efd9ae)}
+.enter-btn:hover:after{transform:rotate(25deg) translateX(520%);opacity:1}
 .enter-btn:active{transform:translateY(0) scale(.99)}
-.skip{position:absolute;right:24px;bottom:20px;z-index:3;border:0;background:rgba(255,250,239,.35);color:rgba(80,57,28,.65);font-size:11px;padding:8px 12px;border-radius:999px;backdrop-filter:blur(8px);cursor:pointer;opacity:0;animation:skipIn .6s 2.7s forwards}
+.skip{position:absolute;right:24px;bottom:20px;z-index:3;border:0;background:rgba(255,250,239,.35);color:rgba(80,57,28,.65);font-size:11px;padding:8px 12px;border-radius:999px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;opacity:0;animation:skipIn .6s 2.8s forwards}
 .exit{animation:fadeOut .7s ease forwards!important}
-.exit .entrance-bg{animation:zoomOut .7s ease forwards!important}.exit .content{animation:contentOut .5s ease forwards}
+.exit .entrance-bg{animation:zoomOut .7s ease forwards!important}
+.exit .content{animation:contentOut .5s ease forwards}
 @keyframes bgIn{to{opacity:1;transform:scale(1)}}
-@keyframes welcomeIn{to{opacity:1;transform:none}}
 @keyframes buttonIn{to{opacity:1;transform:none}}
 @keyframes skipIn{to{opacity:1}}
 @keyframes fadeOut{to{opacity:0}}
 @keyframes zoomOut{to{opacity:0;transform:scale(1.035)}}
 @keyframes contentOut{to{opacity:0;transform:translateY(-8px)}}
-@media(max-width:700px){.entrance-bg{background-position:62% center}.content{justify-content:flex-start;padding-top:12vh}.welcome{margin-top:42vh;font-size:31px;letter-spacing:.17em}.welcome:before,.welcome:after{width:24px;margin-right:10px}.welcome:after{margin-left:10px}.enter-btn{margin-top:25px;min-width:210px;height:58px;font-size:14px}.skip{right:14px;bottom:14px}}
-@media(max-width:420px){.content{padding-top:9vh}.welcome{margin-top:47vh;font-size:26px}.enter-btn{min-width:200px}}
-@media(prefers-reduced-motion:reduce){.entrance-bg,.welcome,.enter-btn,.skip{animation:none;opacity:1;transform:none}.skip{opacity:1}}
+@media(max-width:700px){
+  .entrance-bg{background-position:62% center}
+  .content{padding:20px 14px 58px}
+  .enter-btn{min-width:210px;height:58px;font-size:14px}
+  .skip{right:14px;bottom:14px}
+}
+@media(max-width:420px){
+  .content{padding-bottom:52px}
+  .enter-btn{min-width:200px}
+}
+@media(prefers-reduced-motion:reduce){
+  .entrance-bg,.enter-btn,.skip{animation:none;opacity:1;transform:none}
+  .skip{opacity:1}
+}
 </style>
 </head>
 <body>
@@ -43,7 +54,6 @@ body{font-family:'Noto Sans KR',sans-serif;color:var(--ink)}
   <div class="entrance-bg" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
   <div class="content">
-    <div class="welcome">WELCOME</div>
     <button class="enter-btn" id="enterBtn" type="button">SOL 입장하기 <span>›</span></button>
   </div>
   <button class="skip" id="skipBtn" type="button">건너뛰기</button>

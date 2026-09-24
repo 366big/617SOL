@@ -74,3 +74,82 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;z-
 }
 @media(max-width:560px){.brand{font-size:12px}.nav{padding-left:13px}.nav-links a{padding:11px}.hero{padding:130px 18px 70px}.hero h1{font-size:76px}.hero-tag{font-size:24px}.hero-copy{font-size:13px}.hero-card{min-height:280px;border-radius:28px;padding:25px}.grid4{grid-template-columns:1fr}.split{grid-template-columns:1fr}.gallery-preview{grid-template-columns:1fr 1fr;grid-auto-rows:150px}.gallery-tile:nth-child(1){grid-row:span 2}.gallery-tile:nth-child(4){grid-column:span 2}.apply-card{padding:28px}.apply-side{padding:30px}.footer-inner{display:block}.footer-right{text-align:left;margin-top:20px}.masonry{columns:2 150px;column-gap:10px}.m-item{margin-bottom:10px;border-radius:17px}.m-placeholder{min-height:190px;padding:17px}.m-placeholder.tall{min-height:310px}.m-placeholder strong{font-size:23px}}
 @media(max-width:370px){.masonry{columns:1}.hero h1{font-size:68px}}
+
+
+/* =========================================================
+   SOL PREMIUM VISUAL SYSTEM
+   Gold edges · Glass depth · Light sweep · Cursor glow · Tilt
+   ========================================================= */
+:root{
+  --gold-bright:#f0d49a;
+  --gold-deep:#9c7134;
+  --glass-hi:rgba(255,255,255,.78);
+  --glass-mid:rgba(255,249,238,.54);
+}
+
+/* Elegant custom cursor on desktop */
+@media (pointer:fine) and (min-width:851px){
+  html,body{cursor:none}
+  a,button,.value-card,.feature,.hero-card,.info-card,.apply-card,.apply-side,.step,.gallery-tile,.m-item{cursor:none}
+  .sol-cursor{position:fixed;left:0;top:0;width:12px;height:12px;border:1px solid rgba(159,128,81,.9);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 0 5px rgba(183,149,93,.07),0 0 22px rgba(183,149,93,.25);transition:width .2s ease,height .2s ease,background .2s ease,border-color .2s ease}
+  .sol-cursor-dot{position:fixed;left:0;top:0;width:3px;height:3px;border-radius:50%;background:#9f7c48;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);box-shadow:0 0 10px rgba(159,124,72,.6)}
+  .sol-cursor.hover{width:34px;height:34px;background:rgba(255,248,232,.08);border-color:rgba(183,149,93,.95)}
+}
+
+/* Gold glass cards */
+.hero-card,.value-card,.feature,.info-card,.apply-card,.apply-side,.step,.gallery-tile,.m-item{
+  position:relative;
+  isolation:isolate;
+  border-color:rgba(169,132,72,.28);
+  background-clip:padding-box;
+  box-shadow:0 16px 50px rgba(83,61,31,.10), inset 0 1px 0 rgba(255,255,255,.72), inset 0 0 0 1px rgba(255,255,255,.14);
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s ease,border-color .45s ease,background .45s ease;
+}
+.hero-card:before,.value-card:before,.feature:before,.info-card:before,.apply-card:before,.apply-side:before,.step:before,.gallery-tile:before,.m-item:before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:linear-gradient(135deg,rgba(255,255,255,.42),transparent 28%,transparent 67%,rgba(217,181,111,.08));
+}
+.hero-card:after,.value-card:after,.feature:after,.info-card:after,.apply-card:after,.apply-side:after,.step:after,.gallery-tile:after,.m-item:after{
+  content:"";position:absolute;top:-70%;left:-40%;width:35%;height:240%;transform:rotate(24deg) translateX(-180%);pointer-events:none;z-index:5;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.46),transparent);
+  filter:blur(2px);opacity:0;transition:transform .9s ease,opacity .35s ease;
+}
+.hero-card:hover,.value-card:hover,.feature:hover,.info-card:hover,.apply-card:hover,.apply-side:hover,.step:hover,.gallery-tile:hover,.m-item:hover{
+  border-color:rgba(183,149,93,.62);
+  box-shadow:0 24px 65px rgba(83,61,31,.16),inset 0 1px 0 rgba(255,255,255,.88),0 0 0 1px rgba(215,181,112,.10),0 0 30px rgba(183,149,93,.08);
+}
+.hero-card:hover:after,.value-card:hover:after,.feature:hover:after,.info-card:hover:after,.apply-card:hover:after,.apply-side:hover:after,.step:hover:after,.gallery-tile:hover:after,.m-item:hover:after{transform:rotate(24deg) translateX(520%);opacity:1}
+
+/* Animated gold rim */
+.hero-card,.value-card,.feature,.info-card,.apply-card,.apply-side,.step,.gallery-tile,.m-item{--mx:50%;--my:50%;overflow:hidden}
+.hero-card::selection,.value-card::selection{background:transparent}
+
+/* Subtle spotlight follows the pointer */
+.card-spotlight:before{
+  background:radial-gradient(circle at var(--mx) var(--my),rgba(255,248,228,.45) 0,rgba(255,248,228,.16) 16%,transparent 46%),linear-gradient(135deg,rgba(255,255,255,.35),transparent 30%,transparent 70%,rgba(217,181,111,.08));
+}
+
+/* Buttons get the same glass/gold language */
+.btn{
+  position:relative;overflow:hidden;border-color:rgba(169,132,72,.38);
+  box-shadow:0 10px 26px rgba(83,61,31,.10),inset 0 1px 0 rgba(255,255,255,.78);
+}
+.btn:before{content:"";position:absolute;inset:1px;border-radius:inherit;background:linear-gradient(115deg,transparent 20%,rgba(255,255,255,.35) 48%,transparent 70%);transform:translateX(-130%);transition:transform .75s ease;pointer-events:none}
+.btn:hover:before{transform:translateX(130%)}
+.btn:hover{border-color:rgba(183,149,93,.72);box-shadow:0 16px 34px rgba(83,61,31,.15),inset 0 1px 0 rgba(255,255,255,.9),0 0 20px rgba(183,149,93,.10)}
+
+/* Navigation glass rim */
+.nav{border-color:rgba(169,132,72,.24);box-shadow:0 14px 42px rgba(79,60,36,.10),inset 0 1px 0 rgba(255,255,255,.8)}
+.nav:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(100deg,rgba(255,255,255,.18),transparent 35%,rgba(213,177,108,.08));}
+
+/* Gallery image treatment */
+.m-item img{transition:transform .7s cubic-bezier(.2,.8,.2,1),filter .5s ease}.m-item:hover img{transform:scale(1.035);filter:saturate(1.04) contrast(1.02)}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion:reduce){
+  .hero-card,.value-card,.feature,.info-card,.apply-card,.apply-side,.step,.gallery-tile,.m-item,.btn,.m-item img{transition:none!important}
+}
+
+@media(max-width:850px){
+  .hero-card,.value-card,.feature,.info-card,.apply-card,.apply-side,.step,.gallery-tile,.m-item{box-shadow:0 12px 34px rgba(83,61,31,.09),inset 0 1px 0 rgba(255,255,255,.72)}
+}
