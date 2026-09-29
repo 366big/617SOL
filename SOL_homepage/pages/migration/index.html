@@ -137,6 +137,63 @@
   .migration-page .recommend-intro h2{font-size:28px}
 }
 
+
+
+/* Match the SOL introduction hero — migration page only */
+.migration-page .page-hero{
+  padding:110px 0 86px;
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  background:radial-gradient(circle at 50% 15%,rgba(215,180,105,.15),transparent 42%);
+}
+.migration-page .page-hero:before{display:none}
+.migration-page .page-hero:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:0;
+  width:180px;
+  height:1px;
+  transform:translateX(-50%);
+  background:linear-gradient(90deg,transparent,rgba(163,124,54,.55),transparent);
+}
+.migration-page .page-hero-inner{max-width:1100px}
+.migration-page .page-hero .eyebrow{justify-content:center;margin-bottom:18px}
+.migration-page .page-hero h1{
+  font-size:clamp(42px,7vw,78px);
+  line-height:1.02;
+  margin:0 0 22px;
+  letter-spacing:-.045em;
+  font-weight:700;
+}
+.migration-page .page-hero h1 em{
+  font-style:normal;
+  color:#9a742f;
+}
+.migration-page .page-hero p{
+  max-width:760px;
+  margin:0 auto;
+  font-size:15px;
+  line-height:1.9;
+  color:#70695d;
+}
+@media(max-width:800px){
+  .migration-page .page-hero{padding:125px 16px 62px}
+  .migration-page .page-hero .eyebrow{margin-bottom:18px}
+  .migration-page .page-hero h1{
+    font-size:clamp(42px,11vw,58px);
+    line-height:1.04;
+    letter-spacing:-.055em;
+    margin-bottom:20px;
+  }
+  .migration-page .page-hero p{font-size:13px;line-height:1.85}
+}
+@media(max-width:420px){
+  .migration-page .page-hero{padding-left:14px;padding-right:14px}
+  .migration-page .page-hero h1{font-size:42px}
+}
+
 </style>
 </head>
 <body>
