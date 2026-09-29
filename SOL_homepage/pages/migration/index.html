@@ -7,6 +7,14 @@
 <link rel="stylesheet" href="../../css/style.css">
 <style>
 /* Migration page only — does not modify the shared site stylesheet. */
+.migration-page .page-hero h1{word-break:keep-all;overflow-wrap:normal;text-wrap:balance}
+.migration-page .page-hero h1 em{white-space:nowrap}
+@media (max-width:760px){
+ .migration-page .page-hero h1{font-size:clamp(28px,8.2vw,36px);line-height:1.22;letter-spacing:-.035em}
+ .migration-page .page-hero h1 br{display:block}
+}
+
+
 .migration-page .recommend-intro{max-width:820px;margin:0 auto 44px;text-align:center}
 .migration-page .recommend-intro .section-kicker{margin-bottom:12px}
 .migration-page .recommend-intro h2{font-size:clamp(30px,4vw,48px);line-height:1.15;margin:0 0 16px}
@@ -52,6 +60,83 @@
 .migration-page .closing{border-top-color:rgba(122,99,57,.14)}
 .migration-page .closing h3{color:#2d2923}
 .migration-page .closing p{color:rgba(54,49,42,.68)}
+
+/* Full mobile optimization — migration page only */
+.migration-page .page-hero-inner,
+.migration-page .recommend-intro,
+.migration-page .reason-grid,
+.migration-page .principles,
+.migration-page .closing,
+.migration-page .application{min-width:0}
+.migration-page .page-hero h1,
+.migration-page .recommend-intro h2,
+.migration-page .reason-card h3,
+.migration-page .principles h3,
+.migration-page .closing h3,
+.migration-page .apply-card h2,
+.migration-page .apply-side h3{word-break:keep-all;overflow-wrap:break-word}
+.migration-page .reason-card p,
+.migration-page .principle span,
+.migration-page .closing p,
+.migration-page .apply-card p,
+.migration-page .apply-side p,
+.migration-page .step span{word-break:keep-all}
+.migration-page .reason-card,
+.migration-page .principle,
+.migration-page .apply-card,
+.migration-page .apply-side{min-width:0}
+
+@media (max-width:760px){
+  .migration-page .page-hero{padding:142px 18px 58px}
+  .migration-page .page-hero-inner{text-align:center}
+  .migration-page .eyebrow{font-size:9px;letter-spacing:.18em;margin-bottom:15px}
+  .migration-page .page-hero h1{font-size:clamp(34px,9.2vw,44px);line-height:1.08;letter-spacing:-.045em;margin:12px 0 18px}
+  .migration-page .page-hero h1 br{display:block}
+  .migration-page .page-hero h1 em{white-space:nowrap}
+  .migration-page .page-hero p{font-size:13px;line-height:1.85;margin:0 auto;max-width:330px}
+  .migration-page .section{padding:68px 16px}
+  .migration-page .recommend-intro{margin-bottom:27px}
+  .migration-page .recommend-intro .section-kicker{font-size:9px;letter-spacing:.17em;margin-bottom:10px}
+  .migration-page .recommend-intro h2{font-size:clamp(29px,7.8vw,36px);line-height:1.18;letter-spacing:-.04em;margin-bottom:13px}
+  .migration-page .recommend-intro p{font-size:13px;line-height:1.8}
+  .migration-page .reason-grid{grid-template-columns:1fr;gap:12px}
+  .migration-page .reason-card{padding:21px 19px 22px;border-radius:17px}
+  .migration-page .reason-no{width:32px;height:32px;font-size:10px;margin-bottom:14px}
+  .migration-page .reason-card h3{font-size:18px;line-height:1.45;margin-bottom:9px;letter-spacing:-.025em}
+  .migration-page .reason-card p{font-size:13px;line-height:1.82}
+  .migration-page .principles{margin-top:14px;padding:22px 17px;border-radius:18px}
+  .migration-page .principles h3{font-size:20px;line-height:1.35;margin-bottom:15px}
+  .migration-page .principle-list{grid-template-columns:1fr;gap:8px}
+  .migration-page .principle{padding:14px 13px;border-radius:13px}
+  .migration-page .principle b{font-size:13px;margin-bottom:4px}
+  .migration-page .principle span{font-size:12px;line-height:1.65}
+  .migration-page .closing{margin-top:12px;padding:27px 8px 8px}
+  .migration-page .closing h3{font-size:21px;line-height:1.4;margin-bottom:9px}
+  .migration-page .closing p{font-size:12px;line-height:1.8}
+  .migration-page .application{grid-template-columns:1fr;gap:12px}
+  .migration-page .apply-card{padding:27px 21px;border-radius:22px}
+  .migration-page .apply-card h2{font-size:38px;line-height:1.05;margin:8px 0 13px}
+  .migration-page .apply-card p{font-size:12px;line-height:1.8}
+  .migration-page .apply-steps{gap:7px;margin:20px 0 0}
+  .migration-page .step{gap:10px;padding:12px;border-radius:13px;font-size:11px;align-items:flex-start;line-height:1.55}
+  .migration-page .step b{flex:0 0 auto}
+  .migration-page .apply-side{padding:25px 21px;border-radius:22px;gap:18px}
+  .migration-page .apply-side h3{font-size:29px;line-height:1.12;margin-bottom:9px}
+  .migration-page .apply-side p{font-size:12px;line-height:1.8;margin-bottom:0}
+  .migration-page .apply-side .btn{width:100%;min-height:48px;margin-top:4px}
+}
+
+@media (max-width:380px){
+  .migration-page .page-hero{padding-left:15px;padding-right:15px}
+  .migration-page .page-hero h1{font-size:33px}
+  .migration-page .page-hero p{font-size:12px}
+  .migration-page .section{padding-left:13px;padding-right:13px}
+  .migration-page .reason-card{padding-left:17px;padding-right:17px}
+  .migration-page .reason-card h3{font-size:17px}
+  .migration-page .reason-card p{font-size:12.5px}
+  .migration-page .recommend-intro h2{font-size:28px}
+}
+
 </style>
 </head>
 <body>
